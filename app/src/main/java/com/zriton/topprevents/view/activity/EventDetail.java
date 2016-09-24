@@ -1,6 +1,7 @@
 package com.zriton.topprevents.view.activity;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
@@ -84,10 +86,29 @@ public class EventDetail extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_event_details, menu);
+        return true;
+    }
+
+
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-           finish();
+        switch (id)
+        {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.action_share:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, mWebsite.getName());
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Hey, check out " +mWebsite.getName()+
+                        "on Toppr Events.");
+                startActivity(Intent.createChooser(intent, "Invite via"));
+                break;
         }
         return super.onOptionsItemSelected(item);
 
