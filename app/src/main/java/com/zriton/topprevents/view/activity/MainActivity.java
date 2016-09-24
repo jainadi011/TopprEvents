@@ -6,6 +6,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.zriton.topprevents.R;
 import com.zriton.topprevents.view.adapter.MainPagerAdapter;
@@ -26,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.tabLayout) TabLayout mTabLayout;
     @BindView(R.id.viewPager) ViewPager mViewPager;
+
+    public TextView getTvCount() {
+        return tvCount;
+    }
+
+    TextView tvCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +79,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setupTabIcons()
     {
-        mTabLayout.getTabAt(0).setIcon(R.drawable.tab_icon_events);
+        View v = LayoutInflater.from(MainActivity.this).inflate(R.layout.layout_list_badge, null);
+        tvCount = (TextView)v.findViewById(R.id.tvCount);
+        mTabLayout.getTabAt(0).setCustomView(v);
         mTabLayout.getTabAt(1).setIcon(R.drawable.tab_icon_favorites);
         mTabLayout.getTabAt(2).setIcon(R.drawable.tab_icon_stats);
         mTabLayout.getTabAt(3).setIcon(R.drawable.tab_icon_about);

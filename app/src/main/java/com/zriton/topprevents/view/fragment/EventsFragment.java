@@ -26,6 +26,7 @@ import com.zriton.topprevents.model.EventResponse;
 import com.zriton.topprevents.presenter.EventsContract;
 import com.zriton.topprevents.presenter.EventsPresenter;
 import com.zriton.topprevents.util.CheckInternetConnection;
+import com.zriton.topprevents.view.activity.MainActivity;
 import com.zriton.topprevents.view.adapter.EventsListAdapter;
 
 import butterknife.BindView;
@@ -57,6 +58,7 @@ public class EventsFragment extends Fragment implements EventsContract.View, Sea
 
     private EventsListAdapter mEventsListAdapter;
     private EventsContract.Presenter mPresenter;
+    private TextView tvCount;
 
     public static EventsFragment newInstance() {
         Bundle arguments = new Bundle();
@@ -72,6 +74,7 @@ public class EventsFragment extends Fragment implements EventsContract.View, Sea
         View lView = inflater.inflate(R.layout.fragment_events, container, false);
         ButterKnife.bind(this, lView);
         initRecyclerView();
+        tvCount = ((MainActivity)getContext()).getTvCount();
         mPresenter = new EventsPresenter(this);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -198,6 +201,7 @@ public class EventsFragment extends Fragment implements EventsContract.View, Sea
         mEventsListAdapter.addWebsite(pEventResponse.getWebsites());
         int apiQuota = Integer.parseInt(pEventResponse.getQuoteAvailable())*100/Integer.parseInt(pEventResponse.getQuoteMax());
         tvQuota.setText("API Quota : "+apiQuota+"%");
+        tvCount.setText(String.valueOf(pEventResponse.getWebsites().size()));
     }
 
 
