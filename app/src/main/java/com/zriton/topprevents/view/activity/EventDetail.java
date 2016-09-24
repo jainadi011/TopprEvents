@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.ImageViewTarget;
@@ -38,6 +39,14 @@ public class EventDetail extends AppCompatActivity {
     ImageView ivImage;
     @BindView(R.id.collapsingToolbarLayout)
     CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.tvCategory)
+    TextView tvCategory;
+    @BindView(R.id.tvDescription)
+    TextView tvDescription;
+    @BindView(R.id.tvExperience)
+    TextView tvExperience;
+    @BindView(R.id.tvCtc)
+    TextView tvCtc;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,6 +93,10 @@ public class EventDetail extends AppCompatActivity {
 
             }
         });
+        tvCategory.setText(mWebsite.getCategory());
+        tvDescription.setText(mWebsite.getDescription());
+        tvExperience.setText(mWebsite.getExperience()+" years");
+        tvCtc.setText("INR 12L - INR 36L");
     }
 
     @Override
@@ -108,6 +121,10 @@ public class EventDetail extends AppCompatActivity {
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Hey, check out " +mWebsite.getName()+
                         "on Toppr Events.");
                 startActivity(Intent.createChooser(intent, "Invite via"));
+                break;
+            case R.id.action_link:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.hackerearth.com/toppr-android-hiring-challenge/"));
+                startActivity(browserIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);
