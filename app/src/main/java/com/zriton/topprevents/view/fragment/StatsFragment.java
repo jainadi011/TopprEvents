@@ -1,5 +1,6 @@
 package com.zriton.topprevents.view.fragment;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 /**
@@ -7,4 +8,11 @@ import android.support.v4.app.Fragment;
  */
 
 public class StatsFragment extends Fragment {
+
+    public static StatsFragment newInstance() {
+        Bundle arguments = new Bundle();
+        StatsFragment fragment = new StatsFragment();
+        fragment.setArguments(arguments);
+        return fragment;
+    }
 }
