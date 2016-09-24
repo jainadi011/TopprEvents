@@ -11,7 +11,7 @@ import com.zriton.topprevents.R;
 import com.zriton.topprevents.view.adapter.MainPagerAdapter;
 import com.zriton.topprevents.view.fragment.AboutFragment;
 import com.zriton.topprevents.view.fragment.EventsFragment;
-import com.zriton.topprevents.view.fragment.FavoriteFragment;
+import com.zriton.topprevents.view.fragment.FavoritesFragment;
 import com.zriton.topprevents.view.fragment.StatsFragment;
 
 import butterknife.BindView;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpViewPager(ViewPager pViewPager) {
         MainPagerAdapter lMainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         lMainPagerAdapter.addFragment(EventsFragment.newInstance(),"Events");
-        lMainPagerAdapter.addFragment(FavoriteFragment.newInstance(),"Favorites");
+        lMainPagerAdapter.addFragment(FavoritesFragment.newInstance(),"Favorites");
         lMainPagerAdapter.addFragment(StatsFragment.newInstance(),"Statistics");
         lMainPagerAdapter.addFragment(AboutFragment.newInstance(),"About");
         pViewPager.setAdapter(lMainPagerAdapter);
@@ -70,10 +70,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setupTabIcons()
     {
-        mTabLayout.getTabAt(0).setIcon(R.drawable.ic_list_black_24dp);
-        mTabLayout.getTabAt(1).setIcon(R.drawable.ic_favorite_border_black_24dp);
-        mTabLayout.getTabAt(2).setIcon(R.drawable.ic_pie_chart_black_24dp);
-        mTabLayout.getTabAt(3).setIcon(R.drawable.ic_account_circle_black_24dp);
+        mTabLayout.getTabAt(0).setIcon(R.drawable.tab_icon_events);
+        mTabLayout.getTabAt(1).setIcon(R.drawable.tab_icon_favorites);
+        mTabLayout.getTabAt(2).setIcon(R.drawable.tab_icon_stats);
+        mTabLayout.getTabAt(3).setIcon(R.drawable.tab_icon_about);
     }
 
     @Override
