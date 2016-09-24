@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,9 +26,11 @@ import butterknife.ButterKnife;
  * Created by aditya on 24/09/16.
  */
 
-public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.ViewHolder> {
+public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.ViewHolder> implements Filterable{
 
     private List<Website> mWebsiteList;
+    private List<Website> filteredList = new ArrayList<>();
+    private FilteredEvents mFilteredEvents;
 
     public EventsListAdapter() {
         mWebsiteList = new ArrayList<>();
@@ -35,6 +39,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     public void addWebsite(List<Website> newWebsite) {
         mWebsiteList.clear();
         mWebsiteList.addAll(newWebsite);
+        this.filteredList=newWebsite;
         notifyDataSetChanged();
     }
 
@@ -83,6 +88,53 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+    }
+
+    @Override
+    public Filter getFilter() {
+        if (mFilteredEvents == null) {
+            mFilteredEvents = new FilteredEvents();
+        }
+
+        return mFilteredEvents;
+    }
+
+    //Filter class to search contacts
+    private class FilteredEvents extends Filter {
+
+
+        @Override
+        protected Filter.FilterResults performFiltering(CharSequence constraint) {
+            FilterResults filterResults = new FilterResults();
+            if (constraint != null && constraint.length() > 0) {
+                ArrayList<Website> tempList = new ArrayList<>();
+
+                // search content in friend list
+                for (Website lWebsite : filteredList) {
+                    if (lWebsite.getName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                        tempList.add(lWebsite);
+                    }
+                }
+
+                filterResults.count = tempList.size();
+                filterResults.values = tempList;
+            } else {
+                filterResults.count = filteredList.size();
+                filterResults.values = filteredList;
+            }
+
+            return filterResults;
+        }
+
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+
+            mWebsiteList = (ArrayList<Website>) results.values;
+            notifyDataSetChanged();
+
+
         }
     }
 }

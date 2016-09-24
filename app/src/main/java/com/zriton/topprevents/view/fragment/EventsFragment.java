@@ -3,10 +3,12 @@ package com.zriton.topprevents.view.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,7 +39,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  * Created by aditya on 24/09/16.
  */
 
-public class EventsFragment extends Fragment implements EventsContract.View {
+public class EventsFragment extends Fragment implements EventsContract.View, SearchView.OnQueryTextListener {
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
@@ -64,9 +66,9 @@ public class EventsFragment extends Fragment implements EventsContract.View {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         View lView = inflater.inflate(R.layout.fragment_events, container, false);
         ButterKnife.bind(this, lView);
-        setHasOptionsMenu(true);
         initRecyclerView();
         mPresenter = new EventsPresenter(this);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -123,7 +125,24 @@ public class EventsFragment extends Fragment implements EventsContract.View {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_search:
+                final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+                searchView.setOnQueryTextListener(this);
+                MenuItemCompat.setOnActionExpandListener(item,
+                        new MenuItemCompat.OnActionExpandListener() {
+                            @Override
+                            public boolean onMenuItemActionCollapse(MenuItem item) {
+                                // Do something when collapsed
+                                return true; // Return true to collapse action view
+                            }
 
+                            @Override
+                            public boolean onMenuItemActionExpand(MenuItem item) {
+                                // Do something when expanded
+                                return true; // Return true to expand action view
+                            }
+                        });
+                return true;
         }
         return false;
     }
@@ -184,5 +203,17 @@ public class EventsFragment extends Fragment implements EventsContract.View {
     @Override
     public void setPresenter(EventsContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        mEventsListAdapter.getFilter().filter(query);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        mEventsListAdapter.getFilter().filter(newText);
+        return true;
     }
 }
