@@ -1,8 +1,6 @@
 package com.zriton.topprevents.presenter;
 
-import com.zriton.topprevents.model.Website;
-
-import java.util.List;
+import com.zriton.topprevents.model.EventResponse;
 
 /**
  * Created by aditya on 24/09/16.
@@ -16,7 +14,7 @@ public class EventsContract {
 
         void setRefreshing(boolean isRefreshing);
 
-        void showEvents(List<Website> tasks);
+        void showEvents(EventResponse pEventResponse);
 
         void showLoadingEventComplete();
 

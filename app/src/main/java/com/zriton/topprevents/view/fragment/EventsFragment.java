@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,19 +16,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zriton.topprevents.R;
-import com.zriton.topprevents.model.Website;
+import com.zriton.topprevents.model.EventResponse;
 import com.zriton.topprevents.presenter.EventsContract;
 import com.zriton.topprevents.presenter.EventsPresenter;
 import com.zriton.topprevents.util.CheckInternetConnection;
 import com.zriton.topprevents.view.adapter.EventsListAdapter;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,10 +47,13 @@ public class EventsFragment extends Fragment implements EventsContract.View, Sea
     @BindView(R.id.progressBar)
     ProgressBar mProgressBar;
     @BindView(R.id.content)
-    LinearLayout mContent;
+    RelativeLayout mContent;
     @BindView(R.id.noInternet)
     RelativeLayout noInternet;
-
+    @BindView(R.id.tvQuota)
+    TextView tvQuota;
+    @BindView(R.id.cvQuota)
+    CardView cvQuota;
 
     private EventsListAdapter mEventsListAdapter;
     private EventsContract.Presenter mPresenter;
@@ -74,11 +76,30 @@ public class EventsFragment extends Fragment implements EventsContract.View, Sea
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (CheckInternetConnection.isConnectedToInternet(getContext()))
+                if (CheckInternetConnection.isConnectedToInternet(getContext())) {
+                    setRefreshing(true);
                     mPresenter.loadEvents(true);
+                }
                 else {
                     setRefreshing(false);
                     Toast.makeText(getContext(), "Please check internet settings and try again", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(dy>0) {
+                    tvQuota.setVisibility(View.GONE);
+                }
+                else {
+                    tvQuota.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -164,13 +185,19 @@ public class EventsFragment extends Fragment implements EventsContract.View, Sea
 
     @Override
     public void setRefreshing(boolean isRefreshing) {
+        if(isRefreshing)
+            cvQuota.setVisibility(View.GONE);
+        else
+            cvQuota.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setRefreshing(isRefreshing);
     }
 
     @Override
-    public void showEvents(List<Website> pWebsiteList) {
+    public void showEvents(EventResponse pEventResponse) {
         mContent.setVisibility(View.VISIBLE);
-        mEventsListAdapter.addWebsite(pWebsiteList);
+        mEventsListAdapter.addWebsite(pEventResponse.getWebsites());
+        int apiQuota = Integer.parseInt(pEventResponse.getQuoteAvailable())*100/Integer.parseInt(pEventResponse.getQuoteMax());
+        tvQuota.setText("API Quota : "+apiQuota+"%");
     }
 
 
@@ -204,6 +231,7 @@ public class EventsFragment extends Fragment implements EventsContract.View, Sea
     public void setPresenter(EventsContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);
     }
+
 
     @Override
     public boolean onQueryTextSubmit(String query) {

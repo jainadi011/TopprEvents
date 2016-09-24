@@ -63,7 +63,7 @@ public class EventsPresenter implements EventsContract.Presenter {
                     @Override
                     public void onNext(EventResponse pEventResponse) {
                         if (pEventResponse.getWebsites().size() > 0)
-                            mEventsView.showEvents(pEventResponse.getWebsites());
+                            mEventsView.showEvents(pEventResponse);
                         else
                             mEventsView.showNoEvents();
                     }
