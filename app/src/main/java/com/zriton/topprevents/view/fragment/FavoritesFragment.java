@@ -16,11 +16,11 @@ import com.zriton.topprevents.R;
  * Created by aditya on 24/09/16.
  */
 
-public class AboutFragment extends Fragment{
+public class FavoritesFragment extends Fragment {
 
-    public static AboutFragment newInstance() {
+    public static FavoritesFragment newInstance() {
         Bundle arguments = new Bundle();
-        AboutFragment fragment = new AboutFragment();
+        FavoritesFragment fragment = new FavoritesFragment();
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -28,7 +28,7 @@ public class AboutFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View lView = inflater.inflate(R.layout.fragment_about, container, false);
+        View lView = inflater.inflate(R.layout.fragment_favorites, container, false);
         setHasOptionsMenu(true);
         return lView;
     }
@@ -55,7 +55,7 @@ public class AboutFragment extends Fragment{
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_about, menu);
+        inflater.inflate(R.menu.menu_favorites, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 }

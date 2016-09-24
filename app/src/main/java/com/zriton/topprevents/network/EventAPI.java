@@ -22,10 +22,9 @@ import rx.Observable;
 
 public class EventAPI {
 
-    private HashMap<String,String> params;
+    private HashMap<String,String> params = new HashMap<>();
 
     public EventAPI() {
-        params = new HashMap<>();
         params.put(Config.GET_EVENTS_TYPE_KEY,Config.GET_EVENTS_TYPE_VALUE);
         params.put(Config.GET_EVENTS_QUERY_KEY, Config.GET_EVENTS_QUERY_VALUE);
     }

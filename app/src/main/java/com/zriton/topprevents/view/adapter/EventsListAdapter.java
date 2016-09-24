@@ -1,6 +1,5 @@
 package com.zriton.topprevents.view.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,17 +23,21 @@ import butterknife.ButterKnife;
 
 public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.ViewHolder> {
 
-    private Context mContext;
-    private List<Website> mWebsiteList = new ArrayList<>();
+    private List<Website> mWebsiteList;
 
-    public EventsListAdapter(Context pContext, List<Website> pWebsiteList) {
-        mContext = pContext;
-        mWebsiteList = pWebsiteList;
+    public EventsListAdapter() {
+        mWebsiteList = new ArrayList<>();
+    }
+
+    public void addWebsite(List<Website> newWebsite) {
+        mWebsiteList.clear();
+        mWebsiteList.addAll(newWebsite);
+        notifyDataSetChanged();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext)
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_events_item, parent, false);
         return new EventsListAdapter.ViewHolder(v);
     }
@@ -44,7 +47,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         final Website lWebsite = mWebsiteList.get(position);
         holder.tvName.setText(lWebsite.getName());
         holder.tvCategory.setText(lWebsite.getCategory());
-        Glide.with(mContext).
+        Glide.with(holder.ivImage.getContext()).
                 load(lWebsite.getImage()).
                 into(holder.ivImage);
 
@@ -66,7 +69,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
         ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(itemView);
+            ButterKnife.bind(this,itemView);
         }
     }
 }
