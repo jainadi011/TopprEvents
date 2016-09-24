@@ -1,12 +1,15 @@
 package com.zriton.topprevents.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 /**
  * Created by aditya on 24/09/16.
  */
 
-public class Website {
+public class Website implements Parcelable{
 
     @SerializedName("id")
     @Expose
@@ -160,4 +163,39 @@ public class Website {
         this.experience = experience;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel pParcel, int pI) {
+        pParcel.writeString(id);
+        pParcel.writeString(name);
+        pParcel.writeString(image);
+        pParcel.writeString(category);
+        pParcel.writeString(description);
+        pParcel.writeString(experience);
+    }
+
+    private Website(Parcel pParcel)
+    {
+        this.id = pParcel.readString();
+        this.name = pParcel.readString();
+        this.image = pParcel.readString();
+        this.category = pParcel.readString();
+        this.description = pParcel.readString();
+        this.experience = pParcel.readString();
+    }
+
+    public static final Parcelable.Creator CREATOR =
+            new Parcelable.Creator() {
+                public Website createFromParcel(Parcel in) {
+                    return new Website(in);
+                }
+
+                public Website[] newArray(int size) {
+                    return new Website[size];
+                }
+            };
 }
